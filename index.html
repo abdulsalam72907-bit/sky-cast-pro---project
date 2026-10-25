@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a1020">
+  <title>SkyCast Pro — Weather, beautifully clear</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sky-effects" id="sky-effects" aria-hidden="true"><span class="orb orb-a"></span><span class="orb orb-b"></span><span class="stars"></span></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="SkyCast home"><span class="brand-mark">✳</span><span>skycast<span class="brand-pro">PRO</span></span></a>
+      <div class="top-actions">
+        <span class="live-label"><i></i> LIVE CONDITIONS</span>
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle light or dark theme" title="Toggle theme">☼</button>
+        <button class="unit-toggle" id="unit-toggle" type="button" aria-label="Toggle temperature units">°C <span>/</span> °F</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">YOUR PERSONAL WEATHER STATION</p>
+        <h1>Look up.<br><span>Live better.</span></h1>
+        <p class="subhead">A little more clarity for whatever the day brings.</p>
+      </div>
+      <div class="search-wrap">
+        <form id="search-form" class="search-form" autocomplete="off">
+          <span class="search-glass" aria-hidden="true">⌕</span>
+          <label class="sr-only" for="city-input">Search for a city</label>
+          <input id="city-input" type="search" placeholder="Search city, region or country…" maxlength="80" required>
+          <button class="search-button" id="search-button" type="submit"><span>Explore</span><span>↗</span></button>
+          <div id="suggestions" class="suggestions hidden" role="listbox" aria-label="City suggestions"></div>
+        </form>
+        <button id="location-button" class="location-button" type="button"><span>◎</span> Use my location</button>
+      </div>
+      <div class="quick-cities"><span>POPULAR</span><button data-city="Lahore">Lahore</button><button data-city="London">London</button><button data-city="Tokyo">Tokyo</button><button data-city="New York">New York</button></div>
+    </section>
+
+    <section class="notice-area" aria-live="polite">
+      <div id="loading-state" class="notice hidden"><span class="loader"></span><div><strong>Reading the sky…</strong><p>Getting the latest conditions for your location.</p></div></div>
+      <div id="error-state" class="notice error-notice hidden"><span class="notice-icon">!</span><div><strong id="error-title">Unable to load weather</strong><p id="error-message">Please try again.</p></div></div>
+    </section>
+
+    <section id="weather-section" class="weather-section hidden">
+      <div class="section-title">
+        <div><p class="eyebrow">RIGHT NOW</p><h2>Current conditions</h2></div>
+        <span id="updated-label" class="updated-label">Live data</span>
+      </div>
+
+      <article class="current-card">
+        <div class="current-main">
+          <div class="place-row"><span class="place-icon">⌖</span><div><h3 id="location-name">Lahore</h3><p id="location-details">Punjab, Pakistan</p></div><button id="favorite-button" class="favorite-button" type="button" aria-label="Add to favorite cities" title="Add to favorites">♡</button></div>
+          <div class="current-weather-row"><div id="weather-visual" class="weather-visual">☀️</div><div><div class="big-temp"><span id="temperature">--</span><span class="degree" id="degree-label">°C</span></div><p id="condition" class="condition">Clear sky</p><p id="feels-like" class="feels-like">Feels like --°</p></div></div>
+          <p class="today-summary" id="today-summary">A fresh look at your local forecast.</p>
+        </div>
+        <div class="current-metrics">
+          <div class="metric"><span class="metric-icon">💧</span><div><small>Humidity</small><strong id="humidity">--%</strong></div></div>
+          <div class="metric"><span class="metric-icon">↗</span><div><small>Wind speed</small><strong id="wind-speed">-- km/h</strong></div></div>
+          <div class="metric"><span class="metric-icon">☁</span><div><small>Cloud cover</small><strong id="cloud-cover">--%</strong></div></div>
+          <div class="metric"><span class="metric-icon">☂</span><div><small>Precipitation</small><strong id="precipitation">-- mm</strong></div></div>
+          <div class="metric"><span class="metric-icon">☀</span><div><small>UV index</small><strong id="uv-index">--</strong></div></div>
+          <div class="metric"><span class="metric-icon">◉</span><div><small>Air quality</small><strong id="air-quality">--</strong></div></div>
+        </div>
+      </article>
+
+      <div class="sun-strip">
+        <div class="sun-item"><span class="sun-symbol">🌅</span><div><small>Sunrise</small><strong id="sunrise">--:--</strong></div></div>
+        <div class="sun-track"><span class="sun-track-label">DAYLIGHT</span><div class="sun-track-line"><span></span></div><div class="sun-track-times"><span id="sunrise-small">--:--</span><span id="sunset-small">--:--</span></div></div>
+        <div class="sun-item sunset-item"><span class="sun-symbol">🌇</span><div><small>Sunset</small><strong id="sunset">--:--</strong></div></div>
+      </div>
+
+      <div class="section-title section-spaced"><div><p class="eyebrow">THE NEXT 24 HOURS</p><h2>Hourly outlook</h2></div><span class="muted-caption">A closer look ahead</span></div>
+      <div id="hourly-grid" class="hourly-grid"></div>
+
+      <div class="section-title section-spaced"><div><p class="eyebrow">PLAN AHEAD</p><h2>7-day forecast</h2></div><span class="muted-caption">Highs and lows</span></div>
+      <div id="forecast-grid" class="forecast-grid"></div>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="utility-card">
+        <div class="utility-heading"><div><p class="eyebrow">SAVED PLACES</p><h2>Your favorites</h2></div><span class="utility-symbol">♡</span></div>
+        <div id="favorites-list" class="favorites-list"><p class="empty-note">Save a city with the ♡ button to keep it close.</p></div>
+      </article>
+      <article class="utility-card">
+        <div class="utility-heading"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Recent searches</h2></div><button id="clear-history" class="text-button hidden" type="button">Clear</button></div>
+        <div id="recent-list" class="recent-list"><p class="empty-note">Your last three searches will appear here.</p></div>
+      </article>
+    </section>
+
+    <footer class="footer"><span>Made for curious minds <b>✦</b></span><span>Weather by <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a> · Air quality by Open-Meteo</span></footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
